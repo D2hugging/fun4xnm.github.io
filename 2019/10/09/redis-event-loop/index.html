@@ -5,18 +5,18 @@
   
 
   
-  <title>Hexo</title>
+  <title>event loop在redis中的使用 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="event loop在redis中的使用">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/10/09/redis-event-loop/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-09T13:39:10.211Z">
+<meta property="og:updated_time" content="2019-10-09T13:45:34.833Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="event loop在redis中的使用">
 <meta name="twitter:description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -74,6 +74,16 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      event loop在redis中的使用
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="event-loop在redis中的使用"><a href="#event-loop在redis中的使用" class="headerlink" title="event loop在redis中的使用"></a>event loop在redis中的使用</h1><p>这篇是对linux平台下redis事件循环的总结。</p>
@@ -92,23 +102,13 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck1jbovyj0000cxs6b7yqx5l8" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck1jbsrat0000gis66jlxbx2q" class="article-share-link">Share</a>
       
       
     </footer>
   </div>
   
     
-<nav id="article-nav">
-  
-  
-    <a href="/2019/09/26/TCMalloc-allocator/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title"></div>
-    </a>
-  
-</nav>
-
   
 </article>
 
@@ -120,29 +120,15 @@
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
-    </div>
-  </div>
-
 
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/TCMalloc/" style="font-size: 10px;">TCMalloc</a>
-    </div>
-  </div>
-
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li></ul>
     </div>
   </div>
 
@@ -155,11 +141,7 @@
       <ul>
         
           <li>
-            <a href="/2019/10/09/redis-event-loop/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/09/26/TCMalloc-allocator/">(no title)</a>
+            <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
           </li>
         
       </ul>
