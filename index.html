@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="https://fun4xnm.github.io/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -54,7 +54,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fun4xnm.github.io"></form>
       </div>
     </div>
   </div>
@@ -89,12 +89,12 @@
 <p>TCMalloc另外的优点是小对象的节省空间表示。例如，N个8字节的对象分配大约使用8N * 1.01字节，即1个1%的空间开销。ptmalloc2为每个对象使用1个四字节的header，将size向上取整到多个8字节，使用16N字节。</p>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>使用TCMalloc，只需要通过”-ltcmalloc”链接标志将TCMalloc链接到你的应用。<br>你可以在应用里通过使用LD_PRELOAD来使用TCMalloc，不需要自己编译：<br>$ LD_PRELOAD=”/usr/lib/libtcmalloc.so”<br>LD_PRELOAD是tricky的，但我们不建议这种使用方式。TCMalloc也包含一个heap checker和heap profiler。如果你想链接一个不包含heap profiler和checker的TCMalloc版本，你可以使用libtcmalloc_minimal。</p>
 <h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>TCMalloc给每个线程分配一个thread-local cache。小的分配从thread-local cache里分配。如果需要，对象会从中央数据结构（central data structure）移动到一个thread-loacl cache，周期性的垃圾回收被用于将内存从thread-local cache移回中央数据结构。</p>
-<p><img src="//yoursite.com/2019/09/26/TCMalloc-allocator/bxt/Documents/workshop/blog/pic/tcmalloc/overview.jpeg" alt></p>
+<p><img src="//fun4xnm.github.io/2019/09/26/TCMalloc-allocator/overview.jpeg" alt></p>
 <p>TCMalloc对待size&lt;=256K(“small” object)和大对象对象(larger object)不同。大对象的分配使用一个page-level的分配器(一页是一个8K对齐的内存区域)直接从中央堆(central heap)分配。即一个大对象总是页对齐的，并且占据整数个页(page)。</p>
 <p>一连串页(a run of pages)可以被分成(be carved up into)一系列的小对象(a sequence of small objects)，每个尺寸相同(each equally sized)。例如一连串的一个page(4K)能被分成32个尺寸为128字节对象。</p>
 <h2 id="小对象分配"><a href="#小对象分配" class="headerlink" title="小对象分配"></a>小对象分配</h2><p>每个小对象大小(small object size)映射到一个大约88可分配的(allocatable)size-classes。例如，961-1024字节范围的分配向上取整到1024。size-classes间隔以便小尺寸被8字节分隔，大尺寸被16字节分隔，甚至更大的尺寸被32字节分隔，以此类推。最大的间隔被控制以便不会有太多的空间浪费当一个分配请求刚好超过一个size class的结尾而向上取整到下一个class。</p>
 <p>一个thraed cache包含一个每个size-class空闲对象的单链表(A thread cache contains a singly linked list of free objects per size-class)。</p>
-<p><img src="//yoursite.com/2019/09/26/TCMalloc-allocator/bxt/Documents/workshop/blog/pic/tcmalloc/thread_cache.jpeg" alt></p>
+<p><img src="//fun4xnm.github.io/2019/09/26/TCMalloc-allocator/thread_cache.jpeg" alt></p>
 <p>当分配小对象时:(1)从一个这个size-class的中央空闲列表(the central free list is shared by all threads)获取一堆对象。(2)将这些对象加入到thread-local空闲列表(free list)。(3)返回新获取的对象中的一个对象给应用。</p>
 <h3 id="调整线程缓存空闲列表"><a href="#调整线程缓存空闲列表" class="headerlink" title="调整线程缓存空闲列表"></a>调整线程缓存空闲列表</h3><p>正确调整线程缓存空闲列表(size the thread cache free lists)很重要。如果线程缓存空闲列表太小，从中央空闲列表分配太频繁。如果线程缓存空闲列表太大，由于对象在空闲列表中闲坐(sit idle)会浪费内存。</p>
 <p>需要注意的是线程缓存在释放(deallocation)时和它们在分配时同样重要。没有缓存，每个释放需要将内存移动到中央空闲列表。并且一些线程会有非对称(asymmetric)的分配/释放(alloc/free)行为(例如producer和consumer线程)，因此正确调整线程缓存空闲列表变得棘手(trickier)。</p>
@@ -103,12 +103,12 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">Start each freelist max_length at <span class="number">1.</span></span><br><span class="line"></span><br><span class="line">Allocation</span><br><span class="line">  <span class="keyword">if</span> freelist empty &#123;</span><br><span class="line">    <span class="function">fetch <span class="title">min</span><span class="params">(max_length, num_objects_to_move)</span> from central <span class="built_in">list</span></span>;</span><br><span class="line">    <span class="keyword">if</span> max_length &lt; num_objects_to_move &#123;  <span class="comment">// slow-start</span></span><br><span class="line">      max_length++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      max_length += num_objects_to_move;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">Deallocation</span><br><span class="line">  <span class="keyword">if</span> length &gt; max_length &#123;</span><br><span class="line">    <span class="comment">// Don't try to release num_objects_to_move if we don't have that many.</span></span><br><span class="line">    <span class="function">release <span class="title">min</span><span class="params">(max_length, num_objects_to_move)</span> objects to central <span class="built_in">list</span></span></span><br><span class="line">    if max_length &lt; num_objects_to_move &#123;</span><br><span class="line">      <span class="comment">// Slow-start up to num_objects_to_move.</span></span><br><span class="line">      max_length++;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> max_length &gt; num_objects_to_move &#123;</span><br><span class="line">      <span class="comment">// If we consistently go over max_length, shrink max_length.</span></span><br><span class="line">      overages++;</span><br><span class="line">      <span class="keyword">if</span> overages &gt; kMaxOverages &#123;</span><br><span class="line">        max_length -= num_objects_to_move;</span><br><span class="line">        overages = <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="中对象的分配"><a href="#中对象的分配" class="headerlink" title="中对象的分配"></a>中对象的分配</h2><p>中对象尺寸(256K&lt;=size&lt;=1MB)向上取整到一个页大小(8K)，由中央页堆(central page heap)处理。中央页堆包含一个128个空闲列表的数组，第k个entry是一个包含k+1个页的空闲列表。</p>
-<p><img src="//yoursite.com/2019/09/26/TCMalloc-allocator/bxt/Documents/workshop/blog/pic/tcmalloc/central_cache.jpeg" alt></p>
+<p><img src="//fun4xnm.github.io/2019/09/26/TCMalloc-allocator/central_cache.jpeg" alt></p>
 <p>通过在第k个空闲链表满足k个page的分配。如果第k个空闲链表为空，我们在下一个(k+1)空闲链表查找，以此类推。如果没有中对象空闲链表可以满足分配，该分配会被当作大对象对待。</p>
 <h2 id="大对象分配"><a href="#大对象分配" class="headerlink" title="大对象分配"></a>大对象分配</h2><p>1MB或更大的分配被认为是大分配(large allocation)。满足这种分配的空闲内存的spans通过尺寸(size)由红黑树追踪(Spans of free memory which can satisfy these allocations are tracked in a red-black tree sorted by size)。分配遵从best-fit算法:树搜索发现比要请求分配空间大的最小空闲空间的spans。分配划分出那样的span并且剩下的空间重新插入大对象树或者一个相应的小一点的空闲链表。如果没有满足请求大小的内存的span存在，我们从系统(sbrk，mmap或/dev/mem)获取内存。</p>
 <h2 id="spans"><a href="#spans" class="headerlink" title="spans"></a>spans</h2><p>TCMalloc管理的heap包含一个页的集合。一个span object表示一串连续的页。span可以被分配或释放。如果释放，span是页堆链表的一个entry(the span is one of the entries in a page heap linked-list)。如果分配，span即是一个分配给应用的大对象，也是一串被划分成一系列小对象的页。如果划分成小对象，对象的size-class在span中记录。</p>
 <p>通过page number索引的中央数组可以用于找页属于哪个span。例如，span a占据2个page，span b占据1个page，span c占据5个page，span d占据3个page。</p>
-<p><img src="//yoursite.com/2019/09/26/TCMalloc-allocator/bxt/Documents/workshop/blog/pic/tcmalloc/span.jpeg" alt></p>
+<p><img src="//fun4xnm.github.io/2019/09/26/TCMalloc-allocator/span.jpeg" alt></p>
 <p>在32位的地址空间，中央数组通过一个2层的radix tree表示，根包含32个entry，每个叶子包含2^14个entry(32位地址空间有2^19个8K的页，树的第一层被2^5除2^19个页)。这将导致一个看起来可接受的64KB(2^14<em>4字节)的中央数组空间的起始内存使用( This leads to a starting memory usage of 64KB of space (2^14</em>4 bytes) for the central array, which seems acceptable)。</p>
 <h2 id="释放"><a href="#释放" class="headerlink" title="释放"></a>释放</h2><p>当对象释放，我们计算它的page number并在中央数组查找，找到对应的span对象。span告诉我们对象是否是小对象，以及是小对象时的size-class。如果是小对象，我们将它插入到当前线程的线程缓存的相应空闲链表。如果线程缓存当前超出一个预设尺寸(默认2MB),将运行垃圾回收器将未使用的对象从线程缓存移动到中央空闲列表。如果是大对象，span告诉我们对象所处的page范围。假设范围是[p,q]。我们查询page p-1和q+1。如果任何一个相邻span空闲，我们将它于[p,q] span进行合并，结果span被插入到page heap相应的空闲链表。</p>
 <h2 id="小对象的中央空闲列表"><a href="#小对象的中央空闲列表" class="headerlink" title="小对象的中央空闲列表"></a>小对象的中央空闲列表</h2><p>如前面所讲，我们为每个size-class维护了一个中央空闲列表。每个中央空闲列表被组织成一个两级的数据结构:一个span的集合，每个span一个空闲对象列表。</p>
@@ -126,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/26/TCMalloc-allocator/" data-id="ck1j9aznn0001e9s6kra4jnpw" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck1j9wiij0001ias6eah2t2wf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -177,7 +177,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/09/25/hello-world/" data-id="ck1j9azna0000e9s6i89w9c7h" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/25/hello-world/" data-id="ck1j9wii20000ias6c5ietbzq" class="article-share-link">Share</a>
       
       
     </footer>
