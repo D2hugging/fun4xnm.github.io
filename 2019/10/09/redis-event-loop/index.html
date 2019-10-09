@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://fun4xnm.github.io/2019/10/09/redis-event-loop/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-10-09T13:39:10.211Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="event loop在redis中的使用这篇是对linux平台下redis事件循环的总结。 redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。 与redis事件循环相关的文件是ae.c、ae.h、ae_ep">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fun4xnm.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-redis-event-loop" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/09/redis-event-loop/" class="article-date">
+  <time datetime="2019-10-09T13:32:26.000Z" itemprop="datePublished">2019-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="event-loop在redis中的使用"><a href="#event-loop在redis中的使用" class="headerlink" title="event loop在redis中的使用"></a>event loop在redis中的使用</h1><p>这篇是对linux平台下redis事件循环的总结。</p>
+<p>redis没有采用多进程或多线程的并发模型，而是采用的epoll/kqueue的I/O multiplexing，简单来说就是运用操作系统的通知机制来告知应用程序那些文件描述符已经可以读写，而不是轮询文件描述符来判断哪些文件描述符已经可以读写。</p>
+<p>与redis事件循环相关的文件是ae.c、ae.h、ae_epoll.c、ae_evport.c、ae_kqueue.c、ae_select.c，anet.h、anet.c是建立tcp连接相关。</p>
+<p>事件循环指的是通过epoll系统调用获取已经可以读写的文件描述符，通过遍历这些已经可以读写的文件描述符，去执行相应的回调函数。</p>
+<p>epoll事件循环的一般用法是，先通过epoll_create创建epoll实例epfd，再通过epoll_ctl将需要监测的文件描述符fd以及fa对应的监测事件添加到epfd中，然后在while （1）循环中调用epoll_wait，如果没有监测事件的发生，epoll_wait会阻塞，当有监测事件发生时，epoll_wait会返回这些事件的个数，以及那些事件发生了，这时可以调用相应的事件处理函数来处理相应的事件。</p>
+<p>在redis server启动过程中，epoll的使用过程是首先在server.c文件中的main函数中调用initServer()函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    initServer();   <span class="comment">//初始化server</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    aeMain(server.el);  <span class="comment">//ae事件循环</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在initServer()函数中通过调用ae.c文件中的函数aeCreateEventLoop()函数初始化epoll实例并赋值给全局变量server的el字段,接着通过调用listenToPort()函数创建特定端口server.port的套接字，backlog、设置非阻塞,接着通过aeCreateTimeEvent()函数添加定时器事件，对应的处理函数为serverCron，通过aeCreateFileEvent()函数将刚才创建并设置好的socket添加到server.el中，并设置好可读事件触发，对应的处理函数为acceptTcpHandler，通过aeCreateFileEvent()添加unix socket描述符，对应处理函数为acceptUnixHandler，最后通过调用aeMain函数开始server.el的事件循环，等待处理定时、文件(网络请求)、时间事件。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">acceptTcpHandler</span><span class="params">(aeEventLoop *el, <span class="keyword">int</span> fd, <span class="keyword">void</span> *privdata, <span class="keyword">int</span> mask)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">while</span> (max--) &#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        cfd = anetTcpAccept(server.neterr, fd, cip, <span class="keyword">sizeof</span>(cip), &amp;cport);   <span class="comment">//accpet到server的socket，生成cfd</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        acceptCommonHandler(cfd, <span class="number">0</span>, cip);   <span class="comment">//cfd处理函数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">acceptCommonHandler</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> flags, <span class="keyword">char</span> *ip)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span> ((c = createClient(fd)) == <span class="literal">NULL</span>) &#123;   <span class="comment">//为每个redis的socket连接创建一个client对象</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function">client *<span class="title">createClient</span><span class="params">(<span class="keyword">int</span> fd)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span> (fd != <span class="number">-1</span>) &#123;</span><br><span class="line">        anetNonBlock(<span class="literal">NULL</span>, fd);     <span class="comment">//设置客户端连接非阻塞</span></span><br><span class="line">        anetEnableTcpNoDelay(<span class="literal">NULL</span>, fd);     <span class="comment">//设置客户端连接非Delay</span></span><br><span class="line">        <span class="keyword">if</span> (server.tcpkeepalive)</span><br><span class="line">            anetKeepAlive(<span class="literal">NULL</span>, fd, server.tcpkeepalive);   <span class="comment">//设置客户端连接keepalive</span></span><br><span class="line">        <span class="keyword">if</span> (aeCreateFileEvent(server.el, fd, AE_READABLE, readQueryFromClient, c) == AE_ERR) &#123;  <span class="comment">//将客户端连接添加到server.el中，并等待客户端连接的可读事件，对应处理函数为readQueryFromClient()</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readQueryFromClient</span><span class="params">(aeEventLoop *el, <span class="keyword">int</span> fd, <span class="keyword">void</span> *privdata, <span class="keyword">int</span> mask)</span> </span>&#123;</span><br><span class="line">    client *c = (client *)privdata;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    processInputBuffer(c);  <span class="comment">//处理buffer中的数据，即通过socket收到从client发送过来的数据</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">processInputBuffer</span><span class="params">(client *c)</span> </span>&#123;</span><br><span class="line">    server.current_client = c;</span><br><span class="line">    <span class="keyword">while</span> (sdslen(c-&gt;querybuf)) &#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="keyword">if</span> (c-&gt;argc ==<span class="number">0</span> ) &#123;</span><br><span class="line">            resetClient(c);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (processCommand(c) == C_OK)  <span class="comment">//处理客户端发送到server的数据</span></span><br><span class="line">                resetClient(c);</span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    server.current_client = <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">processCommand</span><span class="params">(client *c)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    c-&gt;cmd = c-&gt;lastcmd = loopupCommand(c-&gt;argv[<span class="number">0</span>]-&gt;ptr);   <span class="comment">//查找客户端请求对应的命令</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span> (c-&gt;flags &amp; CLIENT_MULTI &amp;&amp;</span><br><span class="line">        c-&gt;cmd-&gt;proc != execCommand &amp;&amp; c-&gt;cmd-&gt;proc != discardCommand &amp;&amp;</span><br><span class="line">        c-&gt;cmd-&gt;proc != multiCommand &amp;&amp; c-&gt;cmd-&gt;proc != watchCommand) &#123;</span><br><span class="line">        queueMultiCommand(c);</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        call(c, CMD_CALL_FULL);     <span class="comment">//执行call</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> C_OK;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">call</span><span class="params">(client *c, <span class="keyword">int</span> flags)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    c-&gt;cmd-&gt;proc(c);    <span class="comment">//调用相应的命令</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回顾整个过程，在主进程中，创建特定端口6379的socket描述符fd，设置可读监听事件，添加到epoll事件循环。当有客户端连接时，fd的可读事件发生，执行acceptTcpHandler，通过accept函数生成新的cfd，设置其可读监听事件，添加到epool事件循环，当客户端有请求发送到server时，cfd的可读事件发生，执行readQueryFromClient，读取接收的数据并解析出用户发送过来的命令以及参数，最后调用call函数执行相应的处理函数。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck1jbovyj0000cxs6b7yqx5l8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/09/26/TCMalloc-allocator/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/TCMalloc/" style="font-size: 10px;">TCMalloc</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/09/redis-event-loop/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/26/TCMalloc-allocator/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
