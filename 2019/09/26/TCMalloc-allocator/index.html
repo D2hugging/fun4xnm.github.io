@@ -5,24 +5,24 @@
   
 
   
-  <title>Hexo</title>
+  <title>TCMalloc Thread-Caching Malloc | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="TCMalloc : Thread-Caching Malloc动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，applica">
+  <meta name="description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta name="keywords" content="TCMalloc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="TCMalloc Thread-Caching Malloc">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="TCMalloc : Thread-Caching Malloc动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，applica">
+<meta property="og:description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/overview.jpeg">
 <meta property="og:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/thread_cache.jpeg">
 <meta property="og:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/central_cache.jpeg">
 <meta property="og:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/span.jpeg">
-<meta property="og:updated_time" content="2019-10-09T13:40:23.486Z">
+<meta property="og:updated_time" content="2019-10-09T13:53:44.177Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="TCMalloc : Thread-Caching Malloc动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，applica">
+<meta name="twitter:title" content="TCMalloc Thread-Caching Malloc">
+<meta name="twitter:description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta name="twitter:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/overview.jpeg">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
@@ -80,9 +80,19 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      TCMalloc Thread-Caching Malloc
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="TCMalloc-Thread-Caching-Malloc"><a href="#TCMalloc-Thread-Caching-Malloc" class="headerlink" title="TCMalloc : Thread-Caching Malloc"></a>TCMalloc : Thread-Caching Malloc</h1><h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的free lists。如果application writers没有很小心调整free lists和从free lists中清除空闲对象，这将导致额外的复杂性和更多的内存使用。</p>
+        <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的free lists。如果application writers没有很小心调整free lists和从free lists中清除空闲对象，这将导致额外的复杂性和更多的内存使用。</p>
 <p>TCMalloc也可以减少多线程程序的锁争用。对于小对象，实质上零争用。对于大对象，TCMalloc试着用精细高效的spinlock。ptmalloc2也通过使用per-thread arena减少锁争用，但有一个比较大的问题是ptmalloc2内存不能从一个arena移动到另外一个arena。这将导致大量的空间浪费。例如，在一个Google应用里，第一阶段可能会为URL规范化结构分配约300MB的内存。当第一阶段结束，第二阶段可能会在相同的地址空间开始。如果第二阶段被分配一个不同的arena而不是第一阶段使用的那个arena，第二阶段不能重用第一阶段留下的任何内存，这将增加另外的300MB到地址空间。类似的内存爆破（memory blowup）问题在其他应用中也有出现。</p>
 <p>TCMalloc另外的优点是小对象的节省空间表示。例如，N个8字节的对象分配大约使用8N * 1.01字节，即1个1%的空间开销。ptmalloc2为每个对象使用1个四字节的header，将size向上取整到多个8字节，使用16N字节。</p>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>使用TCMalloc，只需要通过”-ltcmalloc”链接标志将TCMalloc链接到你的应用。<br>你可以在应用里通过使用LD_PRELOAD来使用TCMalloc，不需要自己编译：<br>$ LD_PRELOAD=”/usr/lib/libtcmalloc.so”<br>LD_PRELOAD是tricky的，但我们不建议这种使用方式。TCMalloc也包含一个heap checker和heap profiler。如果你想链接一个不包含heap profiler和checker的TCMalloc版本，你可以使用libtcmalloc_minimal。</p>
@@ -124,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck1jbovyx0001cxs6o8d32ayc" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck1jc3ic50000j3s6zfem3ifs" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -139,7 +149,7 @@
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          (no title)
+          event loop在redis中的使用
         
       </div>
     </a>
@@ -193,11 +203,11 @@
       <ul>
         
           <li>
-            <a href="/2019/10/09/redis-event-loop/">(no title)</a>
+            <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
           </li>
         
           <li>
-            <a href="/2019/09/26/TCMalloc-allocator/">(no title)</a>
+            <a href="/2019/09/26/TCMalloc-allocator/">TCMalloc Thread-Caching Malloc</a>
           </li>
         
       </ul>
