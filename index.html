@@ -5,17 +5,17 @@
   
 
   
-  <title>Hexo</title>
+  <title>Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="Talk is cheap">
 <meta property="og:url" content="https://fun4xnm.github.io/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Talk is cheap">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Talk is cheap">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -34,7 +34,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Talk is cheap</a>
       </h1>
       
     </div>
@@ -61,6 +61,78 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Consistent-Hash-Ring" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/15/Consistent-Hash-Ring/" class="article-date">
+  <time datetime="2019-10-14T16:17:05.000Z" itemprop="datePublished">2019-10-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck20lq1y60000ets6kfbmr14s" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Thread-Pool" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/09/Thread-Pool/" class="article-date">
+  <time datetime="2019-10-09T13:58:38.000Z" itemprop="datePublished">2019-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/09/Thread-Pool/">Thread Pool</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> THREAD_POOL_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THREAD_POOL_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadPool</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ThreadPool(<span class="keyword">size_t</span>);</span><br><span class="line">    <span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">F</span>, <span class="title">class</span>... <span class="title">Args</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="title">auto</span> <span class="title">enqueue</span>(<span class="title">F</span>&amp;&amp; <span class="title">f</span>, <span class="title">Args</span>&amp;&amp;... <span class="title">args</span>) </span></span><br><span class="line"><span class="class">        -&gt; <span class="title">std</span>:</span>:future&lt;<span class="keyword">typename</span> <span class="built_in">std</span>::result_of&lt;F(Args...)&gt;::type&gt;;</span><br><span class="line">    ~ThreadPool();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// need to keep track of threads so we can join them</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt; <span class="built_in">std</span>::thread &gt; workers_;</span><br><span class="line">    <span class="comment">// the task queue</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">queue</span>&lt; <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>()&gt; &gt; tasks_;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// synchronization</span></span><br><span class="line">    <span class="built_in">std</span>::mutex m_;</span><br><span class="line">    <span class="built_in">std</span>::condition_variable cv_;</span><br><span class="line">    <span class="keyword">bool</span> stop_;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// the constructor just launches some amount of workers</span></span><br><span class="line"><span class="keyword">inline</span> ThreadPool::ThreadPool(<span class="keyword">size_t</span> threads)</span><br><span class="line">    :   stop_(<span class="literal">false</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">size_t</span> i = <span class="number">0</span>;i&lt;threads;++i)</span><br><span class="line">        workers_.emplace_back(</span><br><span class="line">            [<span class="keyword">this</span>]</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">for</span>(;;)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>()&gt; task;</span><br><span class="line"></span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="built_in">std</span>::unique_lock&lt;<span class="built_in">std</span>::mutex&gt; lock(<span class="keyword">this</span>-&gt;m_);</span><br><span class="line">                        <span class="keyword">this</span>-&gt;cv_.wait(lock,</span><br><span class="line">                            [<span class="keyword">this</span>]&#123; <span class="keyword">return</span> <span class="keyword">this</span>-&gt;stop_ || !<span class="keyword">this</span>-&gt;tasks_.empty(); &#125;);</span><br><span class="line">                        <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;stop_ &amp;&amp; <span class="keyword">this</span>-&gt;tasks_.empty())</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        task = <span class="built_in">std</span>::move(<span class="keyword">this</span>-&gt;tasks_.front());</span><br><span class="line">                        <span class="keyword">this</span>-&gt;tasks_.pop();</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    task();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// add new work item to the pool</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">F</span>, <span class="title">class</span>... <span class="title">Args</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">auto</span> <span class="title">ThreadPool</span>:</span>:enqueue(F&amp;&amp; f, Args&amp;&amp;... args) </span><br><span class="line">    -&gt; <span class="built_in">std</span>::future&lt;<span class="keyword">typename</span> <span class="built_in">std</span>::result_of&lt;F(Args...)&gt;::type&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> return_type = <span class="keyword">typename</span> <span class="built_in">std</span>::result_of&lt;F(Args...)&gt;::type;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> task = <span class="built_in">std</span>::make_shared&lt; <span class="built_in">std</span>::packaged_task&lt;return_type()&gt; &gt;(</span><br><span class="line">            <span class="built_in">std</span>::bind(<span class="built_in">std</span>::forward&lt;F&gt;(f), <span class="built_in">std</span>::forward&lt;Args&gt;(args)...)</span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">    <span class="built_in">std</span>::future&lt;return_type&gt; res = task-&gt;get_future();</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::unique_lock&lt;<span class="built_in">std</span>::mutex&gt; lock(m_);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// don't allow enqueueing after stopping the pool</span></span><br><span class="line">        <span class="keyword">if</span>(stop_)</span><br><span class="line">            <span class="keyword">throw</span> <span class="built_in">std</span>::runtime_error(<span class="string">"enqueue on stopped ThreadPool"</span>);</span><br><span class="line"></span><br><span class="line">        tasks_.emplace([task]()&#123; (*task)(); &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    cv_.notify_one();</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// the destructor joins all threads</span></span><br><span class="line"><span class="keyword">inline</span> ThreadPool::~ThreadPool()</span><br><span class="line">&#123;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::unique_lock&lt;<span class="built_in">std</span>::mutex&gt; lock(m_);</span><br><span class="line">        stop_ = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    cv_.notify_all();</span><br><span class="line">    <span class="keyword">for</span>(<span class="built_in">std</span>::thread &amp;worker: workers_)</span><br><span class="line">        worker.join();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck20lq1ya0001ets6plq8w9o0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-redis-event-loop" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -100,7 +172,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck1jc1z5900003ls6k3dmkruq" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck20lq1yb0002ets6ygpmx6nm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -174,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck1jc3ic50000j3s6zfem3ifs" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck20lq1yo0003ets6djihgpqk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -229,6 +301,14 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/09/Thread-Pool/">Thread Pool</a>
+          </li>
         
           <li>
             <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>

@@ -5,14 +5,14 @@
   
 
   
-  <title>TCMalloc Thread-Caching Malloc | Hexo</title>
+  <title>TCMalloc Thread-Caching Malloc | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta name="keywords" content="TCMalloc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TCMalloc Thread-Caching Malloc">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Talk is cheap">
 <meta property="og:description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/overview.jpeg">
@@ -25,7 +25,7 @@
 <meta name="twitter:description" content="动机TCMalloc比glibc2.3 malloc（ptmalloc2）和其他我测试过的malloc快。分配小对象时，ptmalloc2耗300ns执行一次malloc/free对在2.8GHz的P4机器上。同样的操作，TCMalloc耗约50ns。对于一个malloc实现来说，速度很重要，因为如果malloc不够快，application writers倾向于在malloc之上写它们自己的fr">
 <meta name="twitter:image" content="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/overview.jpeg">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -44,7 +44,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Talk is cheap</a>
       </h1>
       
     </div>
@@ -134,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck1jc3ic50000j3s6zfem3ifs" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck20lq1yo0003ets6djihgpqk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -201,6 +201,14 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/09/Thread-Pool/">Thread Pool</a>
+          </li>
         
           <li>
             <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
