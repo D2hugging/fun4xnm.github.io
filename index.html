@@ -62,6 +62,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" class="article-date">
+  <time datetime="2019-10-27T13:54:21.000Z" itemprop="datePublished">2019-10-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。</p>
+<p>SWIM是一个进程组的成员关系协议，特点是可伸缩、弱一致性、感染型。</p>
+<p>用于分布式系统中进程的健康检测或者说错误检测。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>SWIM包含两部分</p>
+<h3 id="SWIM-Failure-Detection"><a href="#SWIM-Failure-Detection" class="headerlink" title="SWIM Failure Detection"></a>SWIM Failure Detection</h3><h4 id="随机探测"><a href="#随机探测" class="headerlink" title="随机探测"></a>随机探测</h4><p>SWIM失败检测算法使用两个参数，protocol period T’(in time unit)，integer k(the size of failure detection subgroups)。SWIM不需要时钟来同步各个member。</p>
+<p>考虑任意成员Mi，在Mi的每个T’时间单元里，随机从本地成员列表中选择一个成员Mj，发送消息ping给Mj，并等待Mj的回复消息ack。如果在特定超时时间内未收到该ack消息，Mi间接地探测Mj。探测方法为，Mi随机选择k个成员并给每个成员发送一个ping-req(Mj)消息，这k个成员轮流(接收ping-req消息)ping Mj并且转发来自Mj的ack(如果接收到)给Mi。在T’的最后,Mi检测是否收到任何ack，直接来自Mj或者间接通过k个成员中的一个。如果没有，Mi在其本地成员列表中申明Mj为failed，并且将这个更新传递给Dissemination Component。</p>
+<h4 id="Suspicion-Mechanism"><a href="#Suspicion-Mechanism" class="headerlink" title="Suspicion Mechanism"></a>Suspicion Mechanism</h4><ul>
+<li><p>{Alive Ml, inc = i} override</p>
+<ul>
+<li><p>{Suspect Ml, inc = j}, i &gt; j</p>
+</li>
+<li><p>{Alive Ml, inc = j}, i &gt; j</p>
+</li>
+</ul>
+</li>
+<li><p>{Suspect Ml, inc = i} overrides</p>
+<ul>
+<li><p>{Suspect Ml, inc = j}, i &gt; j</p>
+</li>
+<li><p>{Alive Ml, inc = j}, i &gt;= j</p>
+</li>
+</ul>
+</li>
+<li><p>{Confirm Ml, inc = i} overrides</p>
+<ul>
+<li><p>{Alive Ml, inc = j}, any j</p>
+</li>
+<li><p>{Suspect Ml, inc = j}, any j</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Dissemination-Component-and-Dynamic-Membership"><a href="#Dissemination-Component-and-Dynamic-Membership" class="headerlink" title="Dissemination Component and Dynamic Membership"></a>Dissemination Component and Dynamic Membership</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck295smtx00010ds6a2uy7ity" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Consistent-Hash-Ring" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/15/Consistent-Hash-Ring/" class="article-date">
@@ -84,11 +152,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h3 id="Horizontal-Scalability"><a href="#Horizontal-Scalability" class="headerlink" title="Horizontal Scalability"></a>Horizontal Scalability</h3><p>考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hash_value = hash_func(data)</span><br><span class="line">server_index = hash_value % n</span><br><span class="line"></span><br><span class="line">server_index = hash_value % (n + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Data-Distribution-–-Avoiding-“Data-Hot-Spots”-in-Cluster"><a href="#Data-Distribution-–-Avoiding-“Data-Hot-Spots”-in-Cluster" class="headerlink" title="Data Distribution – Avoiding  “Data Hot Spots” in Cluster"></a>Data Distribution – Avoiding  “Data Hot Spots” in Cluster</h3><p>考虑如下场景，一些data的server_index会比别的多，这会造成数据不均匀分布，某个节点或某些节点的数据会有更多的查询，称为热点。</p>
+<p>一致性哈希算法可以解决这两个问题</p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>一致性哈希算法(consistent hash)的做法是将多个节点映射到一个空间的点，数据也映射到这个相同的空间，按照顺时针方向找到最近的节点，将数据存入该节点。当加入一个新节点时，数据到空间的映射方法没变，只是多了一个映射的节点，只有一部分数据需要移到这个新加入的节点，减少了数据移动。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><a href="https://arxiv.org/pdf/1406.2294.pdf" target="_blank" rel="noopener">A Fast, Minimal Memory, Consistent Hash Algorithm</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int32_t</span> JumpConsistentHash(<span class="keyword">unit64_t</span> key, <span class="keyword">int32_t</span> num_buckets) &#123;</span><br><span class="line">    <span class="keyword">int64_t</span> b = <span class="number">-1</span>, j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (j &lt; num_buckets) &#123;</span><br><span class="line">        b = j;</span><br><span class="line">        key = key * <span class="number">2862933555777941757U</span>LL + <span class="number">1</span>;</span><br><span class="line">        j = (b + <span class="number">1</span>) * (<span class="keyword">double</span>(<span class="number">1L</span>L &lt;&lt; <span class="number">31</span>) / <span class="keyword">double</span>((key &gt;&gt; <span class="number">33</span>) + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck20lq1y60000ets6kfbmr14s" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck295smtt00000ds60s1ssnhe" class="article-share-link">Share</a>
       
       
     </footer>
@@ -124,7 +199,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck20lq1ya0001ets6plq8w9o0" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck295smu000020ds6q5d3u8xe" class="article-share-link">Share</a>
       
       
     </footer>
@@ -172,7 +247,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck20lq1yb0002ets6ygpmx6nm" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck295smu100030ds6e8682a0f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -246,7 +321,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck20lq1yo0003ets6djihgpqk" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck295smud00040ds6vdmoe9qc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -301,6 +376,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</a>
+          </li>
         
           <li>
             <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>

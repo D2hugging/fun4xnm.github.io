@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Scalable Weakly-consistent Infection-style Process Group Membership Protocol | Talk is cheap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scalable Weakly-consistent Infection-style Process Group Membership Protocol">
+<meta property="og:url" content="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/index.html">
+<meta property="og:site_name" content="Talk is cheap">
+<meta property="og:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-10-27T15:39:22.846Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scalable Weakly-consistent Infection-style Process Group Membership Protocol">
+<meta name="twitter:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
+  
+    <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Talk is cheap</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://fun4xnm.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" class="article-date">
+  <time datetime="2019-10-27T13:54:21.000Z" itemprop="datePublished">2019-10-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Scalable Weakly-consistent Infection-style Process Group Membership Protocol
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。</p>
+<p>SWIM是一个进程组的成员关系协议，特点是可伸缩、弱一致性、感染型。</p>
+<p>用于分布式系统中进程的健康检测或者说错误检测。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>SWIM包含两部分</p>
+<h3 id="SWIM-Failure-Detection"><a href="#SWIM-Failure-Detection" class="headerlink" title="SWIM Failure Detection"></a>SWIM Failure Detection</h3><h4 id="随机探测"><a href="#随机探测" class="headerlink" title="随机探测"></a>随机探测</h4><p>SWIM失败检测算法使用两个参数，protocol period T’(in time unit)，integer k(the size of failure detection subgroups)。SWIM不需要时钟来同步各个member。</p>
+<p>考虑任意成员Mi，在Mi的每个T’时间单元里，随机从本地成员列表中选择一个成员Mj，发送消息ping给Mj，并等待Mj的回复消息ack。如果在特定超时时间内未收到该ack消息，Mi间接地探测Mj。探测方法为，Mi随机选择k个成员并给每个成员发送一个ping-req(Mj)消息，这k个成员轮流(接收ping-req消息)ping Mj并且转发来自Mj的ack(如果接收到)给Mi。在T’的最后,Mi检测是否收到任何ack，直接来自Mj或者间接通过k个成员中的一个。如果没有，Mi在其本地成员列表中申明Mj为failed，并且将这个更新传递给Dissemination Component。</p>
+<h4 id="Suspicion-Mechanism"><a href="#Suspicion-Mechanism" class="headerlink" title="Suspicion Mechanism"></a>Suspicion Mechanism</h4><ul>
+<li><p>{Alive Ml, inc = i} override</p>
+<ul>
+<li><p>{Suspect Ml, inc = j}, i &gt; j</p>
+</li>
+<li><p>{Alive Ml, inc = j}, i &gt; j</p>
+</li>
+</ul>
+</li>
+<li><p>{Suspect Ml, inc = i} overrides</p>
+<ul>
+<li><p>{Suspect Ml, inc = j}, i &gt; j</p>
+</li>
+<li><p>{Alive Ml, inc = j}, i &gt;= j</p>
+</li>
+</ul>
+</li>
+<li><p>{Confirm Ml, inc = i} overrides</p>
+<ul>
+<li><p>{Alive Ml, inc = j}, any j</p>
+</li>
+<li><p>{Suspect Ml, inc = j}, any j</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Dissemination-Component-and-Dynamic-Membership"><a href="#Dissemination-Component-and-Dynamic-Membership" class="headerlink" title="Dissemination Component and Dynamic Membership"></a>Dissemination Component and Dynamic Membership</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck295smtx00010ds6a2uy7ity" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/15/Consistent-Hash-Ring/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Consistent Hash Ring</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/TCMalloc/" style="font-size: 10px;">TCMalloc</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/09/Thread-Pool/">Thread Pool</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
+          </li>
+        
+          <li>
+            <a href="/2019/09/26/TCMalloc-allocator/">TCMalloc Thread-Caching Malloc</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

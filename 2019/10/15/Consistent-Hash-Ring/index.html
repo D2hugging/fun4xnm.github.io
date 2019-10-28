@@ -7,14 +7,17 @@
   
   <title>Consistent Hash Ring | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Consistent Hash Ring">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/index.html">
 <meta property="og:site_name" content="Talk is cheap">
+<meta property="og:description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-14T16:17:05.606Z">
+<meta property="og:updated_time" content="2019-10-27T13:51:00.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Consistent Hash Ring">
+<meta name="twitter:description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
   
     <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
@@ -83,11 +86,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><h3 id="Horizontal-Scalability"><a href="#Horizontal-Scalability" class="headerlink" title="Horizontal Scalability"></a>Horizontal Scalability</h3><p>考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hash_value = hash_func(data)</span><br><span class="line">server_index = hash_value % n</span><br><span class="line"></span><br><span class="line">server_index = hash_value % (n + <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Data-Distribution-–-Avoiding-“Data-Hot-Spots”-in-Cluster"><a href="#Data-Distribution-–-Avoiding-“Data-Hot-Spots”-in-Cluster" class="headerlink" title="Data Distribution – Avoiding  “Data Hot Spots” in Cluster"></a>Data Distribution – Avoiding  “Data Hot Spots” in Cluster</h3><p>考虑如下场景，一些data的server_index会比别的多，这会造成数据不均匀分布，某个节点或某些节点的数据会有更多的查询，称为热点。</p>
+<p>一致性哈希算法可以解决这两个问题</p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>一致性哈希算法(consistent hash)的做法是将多个节点映射到一个空间的点，数据也映射到这个相同的空间，按照顺时针方向找到最近的节点，将数据存入该节点。当加入一个新节点时，数据到空间的映射方法没变，只是多了一个映射的节点，只有一部分数据需要移到这个新加入的节点，减少了数据移动。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p><a href="https://arxiv.org/pdf/1406.2294.pdf" target="_blank" rel="noopener">A Fast, Minimal Memory, Consistent Hash Algorithm</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int32_t</span> JumpConsistentHash(<span class="keyword">unit64_t</span> key, <span class="keyword">int32_t</span> num_buckets) &#123;</span><br><span class="line">    <span class="keyword">int64_t</span> b = <span class="number">-1</span>, j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (j &lt; num_buckets) &#123;</span><br><span class="line">        b = j;</span><br><span class="line">        key = key * <span class="number">2862933555777941757U</span>LL + <span class="number">1</span>;</span><br><span class="line">        j = (b + <span class="number">1</span>) * (<span class="keyword">double</span>(<span class="number">1L</span>L &lt;&lt; <span class="number">31</span>) / <span class="keyword">double</span>((key &gt;&gt; <span class="number">33</span>) + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck20lq1y60000ets6kfbmr14s" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck295smtt00000ds60s1ssnhe" class="article-share-link">Share</a>
       
       
     </footer>
@@ -95,6 +105,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Scalable Weakly-consistent Infection-style Process Group Membership Protocol
+        
+      </div>
+    </a>
   
   
     <a href="/2019/10/09/Thread-Pool/" id="article-nav-older" class="article-nav-link-wrap">
@@ -148,6 +167,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</a>
+          </li>
         
           <li>
             <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
