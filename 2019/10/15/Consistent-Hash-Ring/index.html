@@ -8,13 +8,14 @@
   <title>Consistent Hash Ring | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
+<meta name="keywords" content="consistent hash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Consistent Hash Ring">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/index.html">
 <meta property="og:site_name" content="Talk is cheap">
 <meta property="og:description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-27T13:51:00.583Z">
+<meta property="og:updated_time" content="2019-10-31T14:56:14.495Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Consistent Hash Ring">
 <meta name="twitter:description" content="动机Horizontal Scalability考虑如下场景，数据data可以存取到多个节点，一般做法可以将多个节点编号为0 ~ n-1，计算数据的hash值然后mod n，结果便是数据将要存取的节点。当加入了一个新节点，此时节点数目为n+1，这时同一个数据存取的位置发生了改变，因为mod的值变为了n+1，需要将已有的数据移到新的节点，代价极大。 1234hash_value = hash_fun">
@@ -97,9 +98,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2etwf410000n49kp7e56ze7" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2eu0x6r0000x29kqut69baa" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consistent-hash/">consistent hash</a></li></ul>
+
     </footer>
   </div>
   
@@ -137,7 +140,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gossip/">Gossip</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/">Redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/consistent-hash/">consistent hash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thread-pool/">thread pool</a></li></ul>
     </div>
   </div>
 
@@ -147,7 +150,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/TCMalloc/" style="font-size: 10px;">TCMalloc</a>
+      <a href="/tags/Gossip/" style="font-size: 10px;">Gossip</a> <a href="/tags/Redis/" style="font-size: 10px;">Redis</a> <a href="/tags/TCMalloc/" style="font-size: 10px;">TCMalloc</a> <a href="/tags/consistent-hash/" style="font-size: 10px;">consistent hash</a> <a href="/tags/thread-pool/" style="font-size: 10px;">thread pool</a>
     </div>
   </div>
 
