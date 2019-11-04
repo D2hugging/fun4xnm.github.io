@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Talk is cheap">
 <meta property="og:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-31T14:56:23.133Z">
+<meta property="og:updated_time" content="2019-11-04T14:12:52.474Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scalable Weakly-consistent Infection-style Process Group Membership Protocol">
 <meta name="twitter:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
@@ -93,7 +93,8 @@
 <h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>SWIM包含两部分</p>
 <h3 id="SWIM-Failure-Detection"><a href="#SWIM-Failure-Detection" class="headerlink" title="SWIM Failure Detection"></a>SWIM Failure Detection</h3><h4 id="随机探测"><a href="#随机探测" class="headerlink" title="随机探测"></a>随机探测</h4><p>SWIM失败检测算法使用两个参数，protocol period T’(in time unit)，integer k(the size of failure detection subgroups)。SWIM不需要时钟来同步各个member。</p>
 <p>考虑任意成员Mi，在Mi的每个T’时间单元里，随机从本地成员列表中选择一个成员Mj，发送消息ping给Mj，并等待Mj的回复消息ack。如果在特定超时时间内未收到该ack消息，Mi间接地探测Mj。探测方法为，Mi随机选择k个成员并给每个成员发送一个ping-req(Mj)消息，这k个成员轮流(接收ping-req消息)ping Mj并且转发来自Mj的ack(如果接收到)给Mi。在T’的最后,Mi检测是否收到任何ack，直接来自Mj或者间接通过k个成员中的一个。如果没有，Mi在其本地成员列表中申明Mj为failed，并且将这个更新传递给Dissemination Component。</p>
-<h4 id="Suspicion-Mechanism"><a href="#Suspicion-Mechanism" class="headerlink" title="Suspicion Mechanism"></a>Suspicion Mechanism</h4><ul>
+<h4 id="Suspicion-Mechanism"><a href="#Suspicion-Mechanism" class="headerlink" title="Suspicion Mechanism"></a>Suspicion Mechanism</h4><p>由于消息处理的不够快或者网络问题，可能导致判断的不准确。文章提出了一种改进，改进点为间接探测的结果不再设置为failed，而是suspicion，该状态会被传递给别的节点。在suspicion状态后，一个特定超时时间内，如果被标记为suspicion状态的成员没有反驳(refute)，则被标记为failed，并将该状态传递给其他成员。</p>
+<ul>
 <li><p>{Alive Ml, inc = i} override</p>
 <ul>
 <li><p>{Suspect Ml, inc = j}, i &gt; j</p>
@@ -119,11 +120,12 @@
 </ul>
 </li>
 </ul>
-<h3 id="Dissemination-Component-and-Dynamic-Membership"><a href="#Dissemination-Component-and-Dynamic-Membership" class="headerlink" title="Dissemination Component and Dynamic Membership"></a>Dissemination Component and Dynamic Membership</h3>
+<h3 id="Dissemination-Component-and-Dynamic-Membership"><a href="#Dissemination-Component-and-Dynamic-Membership" class="headerlink" title="Dissemination Component and Dynamic Membership"></a>Dissemination Component and Dynamic Membership</h3><h3 id="lifeguard"><a href="#lifeguard" class="headerlink" title="lifeguard"></a>lifeguard</h3><p>减少假阳性的比例和缩短探测时间</p>
+<h4 id="Local-Health-Aware-Probe"><a href="#Local-Health-Aware-Probe" class="headerlink" title="Local Health Aware Probe"></a>Local Health Aware Probe</h4><h4 id="Local-Health-Aware-Suspicion"><a href="#Local-Health-Aware-Suspicion" class="headerlink" title="Local Health Aware Suspicion"></a>Local Health Aware Suspicion</h4><h4 id="Buddy-System"><a href="#Buddy-System" class="headerlink" title="Buddy System"></a>Buddy System</h4>
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2eu0x6x0001x29k720p09gm" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2ki8m3u0000xc9kz5w3hi5f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gossip/">Gossip</a></li></ul>
