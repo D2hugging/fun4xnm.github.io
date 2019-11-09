@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Talk is cheap">
 <meta property="og:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-04T14:12:52.474Z">
+<meta property="og:updated_time" content="2019-11-09T10:22:37.197Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Scalable Weakly-consistent Infection-style Process Group Membership Protocol">
 <meta name="twitter:description" content="动机SWIM (Scalable Weakly-consistent Infection-style Process Group Membership Protocol)可以翻译成可扩展弱一致性感染型进程组成员协议，可伸缩scalable、弱一致性weakly-consitent、感染型infection-style的process group的membership协议。 SWIM是一个进程组的成">
@@ -121,11 +121,15 @@
 </li>
 </ul>
 <h3 id="Dissemination-Component-and-Dynamic-Membership"><a href="#Dissemination-Component-and-Dynamic-Membership" class="headerlink" title="Dissemination Component and Dynamic Membership"></a>Dissemination Component and Dynamic Membership</h3><h3 id="lifeguard"><a href="#lifeguard" class="headerlink" title="lifeguard"></a>lifeguard</h3><p>减少假阳性的比例和缩短探测时间</p>
-<h4 id="Local-Health-Aware-Probe"><a href="#Local-Health-Aware-Probe" class="headerlink" title="Local Health Aware Probe"></a>Local Health Aware Probe</h4><h4 id="Local-Health-Aware-Suspicion"><a href="#Local-Health-Aware-Suspicion" class="headerlink" title="Local Health Aware Suspicion"></a>Local Health Aware Suspicion</h4><h4 id="Buddy-System"><a href="#Buddy-System" class="headerlink" title="Buddy System"></a>Buddy System</h4>
+<h4 id="Local-Health-Aware-Probe"><a href="#Local-Health-Aware-Probe" class="headerlink" title="Local Health Aware Probe"></a>Local Health Aware Probe</h4><p>与SWIM比，探测超时时间不是固定不变的，而是根据网络拥塞情况可以动态调整的。</p>
+<h4 id="Local-Health-Aware-Suspicion"><a href="#Local-Health-Aware-Suspicion" class="headerlink" title="Local Health Aware Suspicion"></a>Local Health Aware Suspicion</h4><p>与SWIM比，Suspicion的反驳超时时间不是固定不变的，同LHAP，可以动态调整。</p>
+<h4 id="Buddy-System"><a href="#Buddy-System" class="headerlink" title="Buddy System"></a>Buddy System</h4><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://www.cs.cornell.edu/Info/Projects/Spinglass/public_pdfs/SWIM.pdf" target="_blank" rel="noopener">Scalable Weakly-consistent Infection-style Process Group Membership<br>Protocol</a></p>
+<p><a href="https://arxiv.org/pdf/1707.00788.pdf" target="_blank" rel="noopener">Lifeguard: Local Health Awareness for More<br>Accurate Failure Detection</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2ki8m3u0000xc9kz5w3hi5f" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2rfat2i0001ims6lb6hhuut" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gossip/">Gossip</a></li></ul>
