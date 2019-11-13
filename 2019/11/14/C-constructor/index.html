@@ -5,15 +5,20 @@
   
 
   
-  <title>Archives: 2019/10 | Talk is cheap</title>
+  <title>C++ constructor | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Talk is cheap">
-<meta property="og:url" content="https://fun4xnm.github.io/archives/2019/10/index.html">
+  <meta name="description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
+<meta name="keywords" content="C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ constructor">
+<meta property="og:url" content="https://fun4xnm.github.io/2019/11/14/C-constructor/index.html">
 <meta property="og:site_name" content="Talk is cheap">
+<meta property="og:description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-11-13T16:55:48.790Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Talk is cheap">
+<meta name="twitter:title" content="C++ constructor">
+<meta name="twitter:description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
   
     <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
@@ -60,97 +65,72 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" class="archive-article-date">
-  <time datetime="2019-10-27T13:54:21.000Z" itemprop="datePublished">Oct 27</time>
+        <section id="main"><article id="post-C-constructor" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/14/C-constructor/" class="article-date">
+  <time datetime="2019-11-13T16:19:43.000Z" itemprop="datePublished">2019-11-14</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</a>
+    <h1 class="article-title" itemprop="name">
+      C++ constructor
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/10/15/Consistent-Hash-Ring/" class="archive-article-date">
-  <time datetime="2019-10-14T16:17:05.000Z" itemprop="datePublished">Oct 15</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/10/09/Thread-Pool/" class="archive-article-date">
-  <time datetime="2019-10-09T13:58:38.000Z" itemprop="datePublished">Oct 9</time>
-</a>
+        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><p>class Foo {<br>public:<br>    Foo(int a) : data_(a) {}</p>
+<pre><code>// copy ctor
+Foo(const Foo&amp; other) {
+    data_ = other.data_;
+}
+// copy assignment ctor
+Foo&amp; operator=(const Foo&amp; rhs) {
+    if (*this != rhs) {
+        data_ = rhs.data_;
+    }
+    return *this;
+}
+~Foo();</code></pre><p>private:<br>    int data_;<br>};</p>
+<h2 id="Copy-Constructor"><a href="#Copy-Constructor" class="headerlink" title="Copy Constructor"></a>Copy Constructor</h2><p>Foo(const Foo&amp; other);<br>Foo(Foo&amp; other);</p>
+<p>拷贝构造函数用于使用其他对象的数据来初始化之前未初始化的对象的数据</p>
+<p>A a;<br>A aa=a;</p>
+<h2 id="Assignment-Constructor"><a href="#Assignment-Constructor" class="headerlink" title="Assignment Constructor"></a>Assignment Constructor</h2><p>赋值构造函数用于使用其他对象的数据来替换已经初始化的对象的数据</p>
+<h3 id="copy-assignment-constructor"><a href="#copy-assignment-constructor" class="headerlink" title="copy assignment constructor"></a>copy assignment constructor</h3><p>Foo&amp; operator=(Foo&amp; rhs);<br>Foo&amp; operator=(const Foo&amp; rhs);</p>
+<p>A aa;<br>A a;<br>aa = a;</p>
+<h3 id="move-assignment-constructor"><a href="#move-assignment-constructor" class="headerlink" title="move assignment constructor"></a>move assignment constructor</h3><h2 id="Move-Constructor"><a href="#Move-Constructor" class="headerlink" title="Move Constructor"></a>Move Constructor</h2>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/09/Thread-Pool/">Thread Pool</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2019/10/09/redis-event-loop/" class="archive-article-date">
-  <time datetime="2019-10-09T13:32:26.000Z" itemprop="datePublished">Oct 9</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj0cqe0001er9kt1allra5" class="article-share-link">Share</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
-    </h1>
-  
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
 
-    </header>
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</div>
+    </a>
   
+</nav>
 
+  
+</article>
 
 </section>
         
