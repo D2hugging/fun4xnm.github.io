@@ -7,18 +7,18 @@
   
   <title>C++ constructor | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
+  <meta name="description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
 <meta name="keywords" content="C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ constructor">
 <meta property="og:url" content="https://fun4xnm.github.io/2019/11/14/C-constructor/index.html">
 <meta property="og:site_name" content="Talk is cheap">
-<meta property="og:description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
+<meta property="og:description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-13T16:55:48.790Z">
+<meta property="og:updated_time" content="2019-11-13T16:57:27.419Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++ constructor">
-<meta name="twitter:description" content="Classclass Foo {public:    Foo(int a) : data_(a) {} // copy ctor Foo(const Foo&amp;amp; other) {     data_ = other.data_; } // copy assignment ctor Foo&amp;amp; operator=(const Foo&amp;amp; rhs) {     if (*this !">
+<meta name="twitter:description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
   
     <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
@@ -87,19 +87,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><p>class Foo {<br>public:<br>    Foo(int a) : data_(a) {}</p>
-<pre><code>// copy ctor
-Foo(const Foo&amp; other) {
-    data_ = other.data_;
-}
-// copy assignment ctor
-Foo&amp; operator=(const Foo&amp; rhs) {
-    if (*this != rhs) {
-        data_ = rhs.data_;
-    }
-    return *this;
-}
-~Foo();</code></pre><p>private:<br>    int data_;<br>};</p>
+        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo(<span class="keyword">int</span> a) : data_(a) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy ctor</span></span><br><span class="line">    Foo(<span class="keyword">const</span> Foo&amp; other) &#123;</span><br><span class="line">        data_ = other.data_;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// copy assignment ctor</span></span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Foo&amp; rhs) &#123;</span><br><span class="line">        <span class="keyword">if</span> (*<span class="keyword">this</span> != rhs) &#123;</span><br><span class="line">            data_ = rhs.data_;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Foo();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> data_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Copy-Constructor"><a href="#Copy-Constructor" class="headerlink" title="Copy Constructor"></a>Copy Constructor</h2><p>Foo(const Foo&amp; other);<br>Foo(Foo&amp; other);</p>
 <p>拷贝构造函数用于使用其他对象的数据来初始化之前未初始化的对象的数据</p>
 <p>A a;<br>A aa=a;</p>
@@ -110,7 +99,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj0cqe0001er9kt1allra5" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj2i9100011r9ks3s64kv6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>

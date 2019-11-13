@@ -84,19 +84,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><p>class Foo {<br>public:<br>    Foo(int a) : data_(a) {}</p>
-<pre><code>// copy ctor
-Foo(const Foo&amp; other) {
-    data_ = other.data_;
-}
-// copy assignment ctor
-Foo&amp; operator=(const Foo&amp; rhs) {
-    if (*this != rhs) {
-        data_ = rhs.data_;
-    }
-    return *this;
-}
-~Foo();</code></pre><p>private:<br>    int data_;<br>};</p>
+        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo(<span class="keyword">int</span> a) : data_(a) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy ctor</span></span><br><span class="line">    Foo(<span class="keyword">const</span> Foo&amp; other) &#123;</span><br><span class="line">        data_ = other.data_;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// copy assignment ctor</span></span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Foo&amp; rhs) &#123;</span><br><span class="line">        <span class="keyword">if</span> (*<span class="keyword">this</span> != rhs) &#123;</span><br><span class="line">            data_ = rhs.data_;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Foo();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> data_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Copy-Constructor"><a href="#Copy-Constructor" class="headerlink" title="Copy Constructor"></a>Copy Constructor</h2><p>Foo(const Foo&amp; other);<br>Foo(Foo&amp; other);</p>
 <p>拷贝构造函数用于使用其他对象的数据来初始化之前未初始化的对象的数据</p>
 <p>A a;<br>A aa=a;</p>
@@ -107,7 +96,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj0cqe0001er9kt1allra5" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj2i9100011r9ks3s64kv6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
@@ -183,7 +172,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2xj0cqi0003er9kmcayfvmq" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2xj2i9500031r9klgor3ppe" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gossip/">Gossip</a></li></ul>
@@ -228,7 +217,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2xj0cq70000er9kfjuqxvdb" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2xj2i8w00001r9kaio3hyok" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consistent-hash/">consistent hash</a></li></ul>
@@ -266,7 +255,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2xj0cqk0004er9kjkwuzwnv" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2xj2i9700041r9k3i8qua9c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread-pool/">thread pool</a></li></ul>
@@ -316,7 +305,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2xj0cql0005er9kjnaemh8g" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2xj2i9800051r9kqwbs1p1z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
@@ -392,7 +381,7 @@ Foo&amp; operator=(const Foo&amp; rhs) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2xj0cr0000fer9kb75r7rkr" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2xj2i9m000f1r9ke65q5fn8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
