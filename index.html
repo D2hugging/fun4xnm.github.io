@@ -62,10 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-C-constructor" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-LRU-LFU-algorithm" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/11/14/C-constructor/" class="article-date">
-  <time datetime="2019-11-13T16:19:43.000Z" itemprop="datePublished">2019-11-14</time>
+    <a href="/2019/11/14/LRU-LFU-algorithm/" class="article-date">
+  <time datetime="2019-11-13T16:59:16.000Z" itemprop="datePublished">2019-11-14</time>
 </a>
     
   </div>
@@ -76,7 +76,46 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/14/C-constructor/">C++ constructor</a>
+      <a class="article-title" href="/2019/11/14/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##</p>
+<h2 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    LRUCache(<span class="keyword">int</span>); </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">refer</span><span class="params">(<span class="keyword">int</span>)</span></span>; </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">display</span><span class="params">()</span></span>; </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="comment">// store keys of cache </span></span><br><span class="line">    <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; q_; </span><br><span class="line">    <span class="comment">// store references of key in cache </span></span><br><span class="line">    <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator&gt; um_;</span><br><span class="line">    <span class="comment">// maximum capacity of cache </span></span><br><span class="line">    <span class="keyword">int</span> cap_;</span><br><span class="line">&#125;; </span><br><span class="line">  </span><br><span class="line"><span class="comment">// Declare the size </span></span><br><span class="line">LRUCache::LRUCache(<span class="keyword">int</span> n) &#123; </span><br><span class="line">    cap_ = n; </span><br><span class="line">&#125; </span><br><span class="line">  </span><br><span class="line"><span class="comment">// Refers key x with in the LRU cache </span></span><br><span class="line"><span class="keyword">void</span> LRUCache::refer(<span class="keyword">int</span> x) &#123; </span><br><span class="line">    <span class="comment">// not present in cache </span></span><br><span class="line">    <span class="keyword">if</span> (um_.find(x) == um_.end()) &#123; </span><br><span class="line">        <span class="comment">// cache is full </span></span><br><span class="line">        <span class="keyword">if</span> (q_.size() == cap_) &#123; </span><br><span class="line">            <span class="comment">// delete least recently used element </span></span><br><span class="line">            <span class="keyword">int</span> last = q_.back(); </span><br><span class="line">            <span class="comment">// Pops the last elmeent </span></span><br><span class="line">            q_.pop_back(); </span><br><span class="line">            <span class="comment">// Erase the last </span></span><br><span class="line">            um_.erase(last); </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// present in cache </span></span><br><span class="line">        q_.erase(um_[x]); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// update reference </span></span><br><span class="line">    q_.push_front(x); </span><br><span class="line">    um_[x] = q_.begin(); </span><br><span class="line">&#125; </span><br><span class="line">  </span><br><span class="line"><span class="comment">// Function to display contents of cache </span></span><br><span class="line"><span class="keyword">void</span> LRUCache::display() &#123; </span><br><span class="line">    <span class="comment">// Iterate in the deque and print </span></span><br><span class="line">    <span class="comment">// all the elements in it </span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> it = q_.begin(); it != q_.end(); ++it) </span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; (*it) &lt;&lt; <span class="string">" "</span>;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="LFU"><a href="#LFU" class="headerlink" title="LFU"></a>LFU</h2>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/11/14/LRU-LFU-algorithm/" data-id="ck2xjexse0001j69kmc20oht4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-C-constructor" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/11/C-constructor/" class="article-date">
+  <time datetime="2019-11-10T16:19:43.000Z" itemprop="datePublished">2019-11-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/11/C-constructor/">C++ constructor</a>
     </h1>
   
 
@@ -96,7 +135,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/14/C-constructor/" data-id="ck2xj2i9100011r9ks3s64kv6" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/11/C-constructor/" data-id="ck2xjexs90000j69kxnhy6g3z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
@@ -172,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2xj2i9500031r9klgor3ppe" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2xjexsk0004j69k8c8ny9n5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gossip/">Gossip</a></li></ul>
@@ -217,7 +256,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2xj2i8w00001r9kaio3hyok" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2xjexsj0003j69k4e70zb6w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consistent-hash/">consistent hash</a></li></ul>
@@ -255,7 +294,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2xj2i9700041r9k3i8qua9c" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2xjexsl0005j69klfw1s17u" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread-pool/">thread pool</a></li></ul>
@@ -305,7 +344,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2xj2i9800051r9kqwbs1p1z" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2xjexsm0008j69k1ihinu4a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
@@ -381,7 +420,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2xj2i9m000f1r9ke65q5fn8" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2xjexsw000gj69ken5x3gur" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -438,7 +477,11 @@
       <ul>
         
           <li>
-            <a href="/2019/11/14/C-constructor/">C++ constructor</a>
+            <a href="/2019/11/14/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/11/C-constructor/">C++ constructor</a>
           </li>
         
           <li>
@@ -451,10 +494,6 @@
         
           <li>
             <a href="/2019/10/09/Thread-Pool/">Thread Pool</a>
-          </li>
-        
-          <li>
-            <a href="/2019/10/09/redis-event-loop/">event loop在redis中的使用</a>
           </li>
         
       </ul>
