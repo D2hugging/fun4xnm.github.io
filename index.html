@@ -62,10 +62,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-LRU-LFU-algorithm" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Observer-Pattern-in-CPP" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/11/14/LRU-LFU-algorithm/" class="article-date">
-  <time datetime="2019-11-13T16:59:16.000Z" itemprop="datePublished">2019-11-14</time>
+    <a href="/2019/11/14/Observer-Pattern-in-CPP/" class="article-date">
+  <time datetime="2019-11-14T15:44:51.000Z" itemprop="datePublished">2019-11-14</time>
 </a>
     
   </div>
@@ -76,7 +76,43 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/14/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
+      <a class="article-title" href="/2019/11/14/Observer-Pattern-in-CPP/">Observer Pattern in CPP</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span>;</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> &#123;</span> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Observer() = <span class="keyword">default</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Update</span><span class="params">(Subject&amp;)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span> &#123;</span> </span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    <span class="keyword">virtual</span> ~Subject() = <span class="keyword">default</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Attach</span><span class="params">(Observer&amp; o)</span> </span>&#123; observers.push_back(&amp;o); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Detach</span><span class="params">(Observer&amp; o)</span> </span>&#123;</span><br><span class="line">        observers.erase(<span class="built_in">std</span>::remove(observers.begin(), observers.end(), &amp;o));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Notify</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>* o : observers) &#123;</span><br><span class="line">            o-&gt;Update(*<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Observer*&gt; observers; </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClockTimer</span> :</span> <span class="keyword">public</span> Subject &#123; </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">SetTime</span><span class="params">(<span class="keyword">int</span> hour, <span class="keyword">int</span> minute, <span class="keyword">int</span> second)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;hour = hour; </span><br><span class="line">        <span class="keyword">this</span>-&gt;minute = minute;</span><br><span class="line">        <span class="keyword">this</span>-&gt;second = second;</span><br><span class="line"></span><br><span class="line">        Notify(); </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetHour</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> hour; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetMinute</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> minute; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">GetSecond</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> second; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>: </span><br><span class="line">    <span class="keyword">int</span> hour;</span><br><span class="line">    <span class="keyword">int</span> minute;</span><br><span class="line">    <span class="keyword">int</span> second;</span><br><span class="line">&#125;; </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DigitalClock</span>:</span> <span class="keyword">public</span> Observer &#123; </span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    explicit DigitalClock(ClockTimer&amp; s) : subject(s) &#123; subject.Attach(*this); &#125;</span><br><span class="line">    ~DigitalClock() &#123; subject.Detach(*<span class="keyword">this</span>); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span><span class="params">(Subject&amp; theChangedSubject)</span> override </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (&amp;theChangedSubject == &amp;subject) &#123;</span><br><span class="line">            Draw();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hour = subject.GetHour(); </span><br><span class="line">        <span class="keyword">int</span> minute = subject.GetMinute(); </span><br><span class="line">        <span class="keyword">int</span> second = subject.GetSecond(); </span><br><span class="line"></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Digital time is "</span> &lt;&lt; hour &lt;&lt; <span class="string">":"</span> </span><br><span class="line">                &lt;&lt; minute &lt;&lt; <span class="string">":"</span> </span><br><span class="line">                &lt;&lt; second &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;           </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    ClockTimer&amp; subject;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AnalogClock</span>:</span> <span class="keyword">public</span> Observer &#123; </span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    explicit AnalogClock(ClockTimer&amp; s) : subject(s) &#123; subject.Attach(*this); &#125;</span><br><span class="line">    ~AnalogClock() &#123; subject.Detach(*<span class="keyword">this</span>); &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Update</span><span class="params">(Subject&amp; theChangedSubject)</span> override </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (&amp;theChangedSubject == &amp;subject) &#123;</span><br><span class="line">            Draw();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Draw</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> hour = subject.GetHour(); </span><br><span class="line">        <span class="keyword">int</span> minute = subject.GetMinute(); </span><br><span class="line">        <span class="keyword">int</span> second = subject.GetSecond(); </span><br><span class="line"></span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Analog time is "</span> &lt;&lt; hour &lt;&lt; <span class="string">":"</span> </span><br><span class="line">                &lt;&lt; minute &lt;&lt; <span class="string">":"</span> </span><br><span class="line">                &lt;&lt; second &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; </span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    ClockTimer&amp; subject;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123; </span><br><span class="line">    ClockTimer timer; </span><br><span class="line">    <span class="function">DigitalClock <span class="title">digitalClock</span><span class="params">(timer)</span></span>; </span><br><span class="line">    <span class="function">AnalogClock <span class="title">analogClock</span><span class="params">(timer)</span></span>; </span><br><span class="line"></span><br><span class="line">    timer.SetTime(<span class="number">14</span>, <span class="number">41</span>, <span class="number">36</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://fun4xnm.github.io/2019/11/14/Observer-Pattern-in-CPP/" data-id="ck2ywf3ub0004h09kejtl3skg" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-LRU-LFU-algorithm" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/11/12/LRU-LFU-algorithm/" class="article-date">
+  <time datetime="2019-11-11T16:59:16.000Z" itemprop="datePublished">2019-11-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/11/12/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
     </h1>
   
 
@@ -91,7 +127,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/14/LRU-LFU-algorithm/" data-id="ck2xjexse0001j69kmc20oht4" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/12/LRU-LFU-algorithm/" data-id="ck2ywf3ua0003h09kffhvbaup" class="article-share-link">Share</a>
       
       
     </footer>
@@ -103,8 +139,8 @@
   
     <article id="post-C-constructor" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/11/11/C-constructor/" class="article-date">
-  <time datetime="2019-11-10T16:19:43.000Z" itemprop="datePublished">2019-11-11</time>
+    <a href="/2019/11/09/C-constructor/" class="article-date">
+  <time datetime="2019-11-08T16:19:43.000Z" itemprop="datePublished">2019-11-09</time>
 </a>
     
   </div>
@@ -115,7 +151,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/11/11/C-constructor/">C++ constructor</a>
+      <a class="article-title" href="/2019/11/09/C-constructor/">C++ constructor</a>
     </h1>
   
 
@@ -135,7 +171,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/11/C-constructor/" data-id="ck2xjexs90000j69kxnhy6g3z" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/09/C-constructor/" data-id="ck2ywf3tz0000h09kfpa9jydd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
@@ -211,7 +247,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2xjexsk0004j69k8c8ny9n5" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" data-id="ck2ywf3uh0009h09kba5dmwt5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gossip/">Gossip</a></li></ul>
@@ -256,7 +292,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2xjexsj0003j69k4e70zb6w" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/15/Consistent-Hash-Ring/" data-id="ck2ywf3u50001h09k2c7lrh1b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/consistent-hash/">consistent hash</a></li></ul>
@@ -294,7 +330,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2xjexsl0005j69klfw1s17u" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/Thread-Pool/" data-id="ck2ywf3ud0005h09kj6hmkqat" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread-pool/">thread pool</a></li></ul>
@@ -344,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2xjexsm0008j69k1ihinu4a" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/10/09/redis-event-loop/" data-id="ck2ywf3ue0008h09k6z5dlp0l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
@@ -420,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2xjexsw000gj69ken5x3gur" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/09/26/TCMalloc-allocator/" data-id="ck2ywf3uw000hh09kfz2t06rw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TCMalloc/">TCMalloc</a></li></ul>
@@ -477,11 +513,15 @@
       <ul>
         
           <li>
-            <a href="/2019/11/14/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
+            <a href="/2019/11/14/Observer-Pattern-in-CPP/">Observer Pattern in CPP</a>
           </li>
         
           <li>
-            <a href="/2019/11/11/C-constructor/">C++ constructor</a>
+            <a href="/2019/11/12/LRU-LFU-algorithm/">LRU &amp; LFU algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/09/C-constructor/">C++ constructor</a>
           </li>
         
           <li>
@@ -490,10 +530,6 @@
         
           <li>
             <a href="/2019/10/15/Consistent-Hash-Ring/">Consistent Hash Ring</a>
-          </li>
-        
-          <li>
-            <a href="/2019/10/09/Thread-Pool/">Thread Pool</a>
           </li>
         
       </ul>
