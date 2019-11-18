@@ -5,20 +5,20 @@
   
 
   
-  <title>C++ constructor | Talk is cheap</title>
+  <title>Golang steal scheduler | Talk is cheap</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
-<meta name="keywords" content="C++">
+  <meta name="description" content="原理123456789runtime.schedule() &amp;#123;    // only 1/61 of the time, check the global runnable queue for a G.    // if not found, check the local queue.    // if not found,    //     try to steal from ot">
+<meta name="keywords" content="scheduler">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++ constructor">
-<meta property="og:url" content="https://fun4xnm.github.io/2019/11/09/C-constructor/index.html">
+<meta property="og:title" content="Golang steal scheduler">
+<meta property="og:url" content="https://fun4xnm.github.io/2019/11/18/golang-steal-scheduler/index.html">
 <meta property="og:site_name" content="Talk is cheap">
-<meta property="og:description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
+<meta property="og:description" content="原理123456789runtime.schedule() &amp;#123;    // only 1/61 of the time, check the global runnable queue for a G.    // if not found, check the local queue.    // if not found,    //     try to steal from ot">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-11-14T15:58:56.636Z">
+<meta property="og:updated_time" content="2019-11-18T14:51:41.929Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++ constructor">
-<meta name="twitter:description" content="Class1234567891011121314151617181920class Foo &amp;#123;public:    Foo(int a) : data_(a) &amp;#123;&amp;#125;    // copy ctor    Foo(const Foo&amp;amp; other) &amp;#123;        data_ = other.data_;    &amp;#125;    // copy a">
+<meta name="twitter:title" content="Golang steal scheduler">
+<meta name="twitter:description" content="原理123456789runtime.schedule() &amp;#123;    // only 1/61 of the time, check the global runnable queue for a G.    // if not found, check the local queue.    // if not found,    //     try to steal from ot">
   
     <link rel="alternate" href="/atom.xml" title="Talk is cheap" type="application/atom+xml">
   
@@ -65,10 +65,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-C-constructor" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-golang-steal-scheduler" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/11/09/C-constructor/" class="article-date">
-  <time datetime="2019-11-08T16:19:43.000Z" itemprop="datePublished">2019-11-09</time>
+    <a href="/2019/11/18/golang-steal-scheduler/" class="article-date">
+  <time datetime="2019-11-18T14:45:28.000Z" itemprop="datePublished">2019-11-18</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      C++ constructor
+      Golang steal scheduler
     </h1>
   
 
@@ -87,22 +87,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Class"><a href="#Class" class="headerlink" title="Class"></a>Class</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo(<span class="keyword">int</span> a) : data_(a) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy ctor</span></span><br><span class="line">    Foo(<span class="keyword">const</span> Foo&amp; other) &#123;</span><br><span class="line">        data_ = other.data_;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// copy assignment ctor</span></span><br><span class="line">    Foo&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Foo&amp; rhs) &#123;</span><br><span class="line">        <span class="keyword">if</span> (*<span class="keyword">this</span> != rhs) &#123;</span><br><span class="line">            data_ = rhs.data_;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ~Foo();</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> data_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+        <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">runtime.schedule() &#123;</span><br><span class="line">    <span class="comment">// only 1/61 of the time, check the global runnable queue for a G.</span></span><br><span class="line">    <span class="comment">// if not found, check the local queue.</span></span><br><span class="line">    <span class="comment">// if not found,</span></span><br><span class="line">    <span class="comment">//     try to steal from other Ps.</span></span><br><span class="line">    <span class="comment">//     if not, check the global runnable queue.</span></span><br><span class="line">    <span class="comment">//     if not found, poll network.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Copy-Constructor"><a href="#Copy-Constructor" class="headerlink" title="Copy Constructor"></a>Copy Constructor</h2><p>Foo(const Foo&amp; other);<br>Foo(Foo&amp; other);</p>
-<p>拷贝构造函数用于使用其他对象的数据来初始化之前未初始化的对象的数据</p>
-<p>A a;<br>A aa=a;</p>
-<h2 id="Assignment-Constructor"><a href="#Assignment-Constructor" class="headerlink" title="Assignment Constructor"></a>Assignment Constructor</h2><p>赋值构造函数用于使用其他对象的数据来替换已经初始化的对象的数据</p>
-<h3 id="copy-assignment-constructor"><a href="#copy-assignment-constructor" class="headerlink" title="copy assignment constructor"></a>copy assignment constructor</h3><p>Foo&amp; operator=(Foo&amp; rhs);<br>Foo&amp; operator=(const Foo&amp; rhs);</p>
-<p>A aa;<br>A a;<br>aa = a;</p>
-<h3 id="move-assignment-constructor"><a href="#move-assignment-constructor" class="headerlink" title="move assignment constructor"></a>move assignment constructor</h3><h2 id="Move-Constructor"><a href="#Move-Constructor" class="headerlink" title="Move Constructor"></a>Move Constructor</h2>
+<h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><p>OS线程才能被操作系统调度<br>用户线程与OS线程映射关系M:N<br>M:1时 M个用户线程映射到一个OS线程，用户线程切换开销小，不能利用多核<br>1：1 一个用户线程映射到一个OS线程，利用多核，但用户线程切换开销大</p>
+<p>golang调度器的线程模型是M:N，考虑上述两种情况的权衡结果</p>
+<p>golang的调度器由 M(OS线程)，P(Processor)，G(goroutine) 构成<br>每个P维护一个local queue，多个P有共享的global queue，当P绑定的M产生的新G一般会加到local queue，当local queue满的时候，才会将G放到global queue里<br>global queue存放local queue满后的G，调度器调度时有1/61的几率优先从global queue中查找G，当没有找到G时在local queue种查找。<br>当从local queue中没找到G时，会从别的P中随机选择一个P，从选择的P的local queue偷取一半的G到local queue，如果偷取失败，检查global queue。如果没有找到，轮训网络<br>一旦找到一个可运行的G，G会运行到被阻塞</p>
+<p>调度器的目的是P将M分配给选择的G</p>
+<p>如果一个G1调用syscall阻塞了M2，调度器会将P4与M2解除绑定，G1与M2的关系会被保存，调度器会将P4绑定一个未阻塞的M，并给M1分配一个可运行的G3<br>虽然M2被阻塞了，但是在M2阻塞期间P4与M1绑定执行了G3，总体上看CPU并未浪费<br>当M2被唤醒时，M2会将G1放入global queue中，等待其他的M将G1从global queue中取走执行。</p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://morsmachine.dk/go-scheduler" target="_blank" rel="noopener">https://morsmachine.dk/go-scheduler</a></p>
+<p><a href="https://rakyll.org/scheduler/" target="_blank" rel="noopener">https://rakyll.org/scheduler/</a></p>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://fun4xnm.github.io/2019/11/09/C-constructor/" data-id="ck34js27a0000fws6402absif" class="article-share-link">Share</a>
+      <a data-url="https://fun4xnm.github.io/2019/11/18/golang-steal-scheduler/" data-id="ck34js27s000bfws6fega90pp" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scheduler/">scheduler</a></li></ul>
 
     </footer>
   </div>
@@ -110,19 +111,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/11/12/LRU-LFU-algorithm/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          LRU &amp; LFU algorithm
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/10/27/Scalable-Weakly-consistent-Infection-style-Process-Group-Membership-Protocol/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/11/17/C-virtual-function/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Scalable Weakly-consistent Infection-style Process Group Membership Protocol</div>
+      <div class="article-nav-title">C++ virtual function</div>
     </a>
   
 </nav>
